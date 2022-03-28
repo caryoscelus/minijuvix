@@ -59,7 +59,7 @@ goTypeIden i = case i of
   A.IdenFunction {} -> unsupported "functions in types"
   A.IdenConstructor {} -> unsupported "constructors in types"
   A.IdenVar {} -> unsupported "type variables"
-  A.IdenInductive d -> TypeIdenInductive (goName d)
+  A.IdenInductive d -> TypeIdenInductive (goName (d ^. A.inductiveRefName))
   A.IdenAxiom {} -> unsupported "axioms in types"
 
 goFunctionParameter :: A.FunctionParameter -> Type
@@ -97,7 +97,7 @@ goPattern p = case p of
 goConstructorApp :: A.ConstructorApp -> ConstructorApp
 goConstructorApp c =
   ConstructorApp
-    (goName (c ^. A.constrAppConstructor))
+    (goName (c ^. A.constrAppConstructor . A.constructorRefName))
     (map goPattern (c ^. A.constrAppParameters))
 
 goType :: A.Expression -> Type
@@ -113,8 +113,8 @@ goApplication (A.Application f x) = Application (goExpression f) (goExpression x
 
 goIden :: A.Iden -> Iden
 goIden i = case i of
-  A.IdenFunction n -> IdenFunction (goName n)
-  A.IdenConstructor c -> IdenConstructor (goName c)
+  A.IdenFunction n -> IdenFunction (goName (n ^. A.functionRefName))
+  A.IdenConstructor c -> IdenConstructor (goName (c ^. A.constructorRefName))
   A.IdenVar v -> IdenVar (goSymbol v)
   A.IdenAxiom {} -> unsupported "axiom identifier"
   A.IdenInductive {} -> unsupported "inductive identifier"
