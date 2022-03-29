@@ -12,7 +12,7 @@ module Simple;
   };
 
 
-  inductive Nat  {
+  inductive Nat {
      zero : Nat;
      suc : Nat → Nat;
   };
@@ -23,10 +23,16 @@ module Simple;
   == (suc a) (suc b) ≔ a == b;
   == _ _ ≔ false;
 
+  f : Nat → Nat;
+  a ≔ a + a;
+
   infixl 4 +;
   + : Nat → Nat → Nat;
-  + zero b ≔ b;
-  + (suc a) b ≔ suc (a + b);
+  + zero b ≔ ;
+  terminating f (suc a) b ≔ f a (g x);
+    );
+  -- marking a clause as terminating
+  -- assume all calls in that clause are decreasing in every argument.
 
   infixr 5 ∷;
   inductive List {
